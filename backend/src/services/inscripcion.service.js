@@ -109,20 +109,43 @@ async function createInscripcion(inscripcion) {
  * ) */
 /*==================================================================== */
 
-
-async function updateInscripcion(id, inscripcion) {
+async function updateInscripcion(id, inscripcion) { 
   try {
-    const { userId, estado } = inscripcion;
+    const { inscripcionId, estado } = inscripcion;
 
     //Verificar que la inscripción exista y actualizarla
-    const updatedInscripcion = await Inscripcion.findByIdAndUpdate
-      (id, {
-        userId,
+    const updatedInscripcion = await Inscripcion.findByIdAndUpdate(
+      id,
+      {
+        inscripcionId,
         estado,
       },
-      { new: true }
-    );  
-    
+      { new: true },
+    );
+
+    if (!updatedInscripcion) return [null, "Inscripción no se actualizó"];
+
+    return [updatedInscripcion, null];
+  } catch (error) {
+    handleError(error, "inscripcion.service -> updateInscripcion");
+  }
+}
+
+async function updateInscripcionComentario(id, inscripcion) { 
+  try {
+    const { inscripcionId, estado } = inscripcion;
+
+    //Verificar que la inscripción exista y actualizarla
+    const updatedInscripcion = await Inscripcion.findByIdAndUpdate(
+      id,
+      {
+        inscripcionId,
+        estado,
+        comentario,
+      },
+      { new: true },
+    );
+
     if (!updatedInscripcion) return [null, "Inscripción no se actualizó"];
 
     return [updatedInscripcion, null];
