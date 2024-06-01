@@ -23,7 +23,7 @@ const inscripcionBodySchema = Joi.object({
         "El emprendedorId proporcionado no es un ObjectId válido.",
     }),
   estado: Joi.string()
-    .valid("pendiente", "aprobada", "rechazada", "sin inscripciones")
+    .valid("pendiente", "aprobada", "rechazada")
     .default("sin inscripciones")
     .messages({
       "string.empty": "El estado no puede estar vacío.",
@@ -31,6 +31,7 @@ const inscripcionBodySchema = Joi.object({
       "string.base": "estado debe ser de tipo string.",
       "string.valid": "El estado debe ser uno de los valores permitidos.",
     }),
+  comentario: Joi.string(),
 }).messages({
   "object.unknown": "No se permiten propiedades adicionales.",
 });

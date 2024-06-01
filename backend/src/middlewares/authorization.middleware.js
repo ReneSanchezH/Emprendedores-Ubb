@@ -110,7 +110,7 @@ async function isBusinessOwnerOrAdmin(req, res, next) {
       return;
     }
 
-    if(req.body.emprendedorId === emprendedor._id.toString()){
+    if (req.body.emprendedorId === emprendedor._id.toString()){
       next();
       return;
     }
@@ -162,8 +162,8 @@ async function isAdminOrManagementOrBusinessOwner(req, res, next) {
 
     const emprendedor = await Emprendedor.findOne({ userId: user.id });
 
-    console.log("emprendedor._id: ",emprendedor._id.toString());
-    console.log("req.params.id: ",req.params.id);
+    console.log("emprendedor._id: ", emprendedor._id.toString());
+    console.log("req.params.id: ", req.params.id);
     if (req.params.id === emprendedor._id.toString()) {
       next();
       return;
@@ -179,8 +179,6 @@ async function isAdminOrManagementOrBusinessOwner(req, res, next) {
     handleError(error, "authorization.middleware -> isAdminOrManagementOrBusinessOwner");
   }
 }
-
-
 
 
 module.exports = {

@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-//usuario envía formulario de inscripción. Se crea un registro en la colección inscripciones.
+// usuario envía formulario de inscripción. Se crea un registro en la colección inscripciones.
 
 const inscripcionSchema = new mongoose.Schema(
   {
@@ -18,9 +18,12 @@ const inscripcionSchema = new mongoose.Schema(
     },
     estado: {
       type: String,
-      enum: ["pendiente", "aprobada", "rechazada", "sin inscripciones"],
+      enum: ["pendiente", "aprobada", "rechazada"],
       default: "sin inscripciones",
       required: true,
+    },
+    comentario: {
+      type: String,
     },
     fechaInscripcion: {
       type: Date,

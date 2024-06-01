@@ -9,17 +9,15 @@ const { handleError } = require("../utils/errorHandler");
 
 async function getInscripcionesSummary(req, res) {
   try {
-    const [inscripciones, errorInscripciones] =
-      await InscripcionService.getInscripcionesSummary();
-    if (errorInscripciones)
-      return respondError(req, res, 404, errorInscripciones);
+    const [inscripciones, errorInscripciones] = await InscripcionService.getInscripcionesSummary();
+    if (errorInscripciones) return respondError(req, res, 404, errorInscripciones);
 
     inscripciones.length === 0
       ? respondSuccess(req, res, 204)
       : respondSuccess(req, res, 200, inscripciones);
   } catch (error) {
     handleError(error, "inscripcion.controller -> getInscripcionesSummary");
-    respondError(req, res, 500, error.message);
+    respondError(req, res, 400, error.message);
   }
 }
 
@@ -45,17 +43,16 @@ async function createInscripcion(req, res) {
   try {
     const { body } = req;
 
-    const { error: bodyError } =
-      InscripcionSchema.inscripcionBodySchema.validate(body);
+    const { error: bodyError } = InscripcionSchema.inscripcionBodySchema.validate(body);
     if (bodyError) return respondError(req, res, 400, bodyError.message);
 
-    const [inscripcion, errorInscripcion] =
-      await InscripcionService.createInscripcion(body);
+    const [inscripcion, errorInscripcion] = await InscripcionService.createInscripcion(body);
 
     if (errorInscripcion) return respondError(req, res, 404, errorInscripcion);
-    if (!inscripcion)
-      return respondError(req, res, 400, "No se creó la inscripción");
-
+    if (!inscripcion) {
+      return respondError(req, res, 500, "No se creó la inscripción");
+    }
+    
     respondSuccess(req, res, 201, inscripcion);
   } catch (error) {
     handleError(error, "inscripcion.controller -> createInscripcion");
@@ -109,10 +106,55 @@ async function deleteInscripcion(req, res) {
   }
 }
 
+async function reviewInscripcion(req, res) {
+  try {
+    const { estado, comentario, inscripcionId } = req.body;
+
+    // Validar inscripcionId
+    const { error: idError } = InscripcionSchema.inscripcionIdSchema.validate({
+      id: inscripcionId,
+    });
+    if (idError) return respondError(req, res, 400, idError.message);
+
+    let updatedInscripcion;
+    if (estado === "Aprobado") {
+      // Actualizar el estado a "Aprobado"
+      updatedInscripcion = await InscripcionService.updateInscripcionEstado(
+        inscripcionId,
+        estado,
+      );
+    } else if (estado === "Rechazado") {
+      // Agregar un comentario si se proporciona uno
+      if (comentario) {
+        updatedInscripcion = await InscripcionService.updateInscripcionEstado(
+          inscripcionId,
+          estado,
+          comentario,
+        );
+      } else {
+        updatedInscripcion = await InscripcionService.updateInscripcionEstado(
+          inscripcionId,
+          estado,
+        );
+      }
+    } else {
+      throw new Error("El estado debe ser 'Aprobado' o 'Rechazado'.");
+    }
+
+    // Respondes con éxito y retornas la inscripción actualizada
+    respondSuccess(req, res, 200, updatedInscripcion);
+  } catch (error) {
+    // Manejar cualquier error que ocurra
+    handleError(error, "inscripcion.controller -> reviewInscripcion");
+    respondError(req, res, 400, error.message);
+  }
+}
+
 module.exports = {
   getInscripcionesSummary,
   getInscripcionById,
   createInscripcion,
   updateInscripcion,
   deleteInscripcion,
+  reviewInscripcion,
 };
