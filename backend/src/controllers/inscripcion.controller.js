@@ -7,16 +7,29 @@ const InscripcionSchema = require("../schema/inscripcion.schema");
 const ProductosService = require("../services/productos.service");
 const { handleError } = require("../utils/errorHandler");
 
+<<<<<<< HEAD
 async function getInscripcionesSummary(req, res) {
   try {
     const [inscripciones, errorInscripciones] = await InscripcionService.getInscripcionesSummary();
     if (errorInscripciones) return respondError(req, res, 404, errorInscripciones);
+=======
+async function getInscripciones(req, res) {
+  try {
+    const [inscripciones, errorInscripciones] =
+      await InscripcionService.getInscripciones();
+    if (errorInscripciones)
+      return respondError(req, res, 404, errorInscripciones);
+>>>>>>> 5b2d593b8b0514cc54aa6b3e5a8f8bca997d1e0f
 
     inscripciones.length === 0
       ? respondSuccess(req, res, 204)
       : respondSuccess(req, res, 200, inscripciones);
   } catch (error) {
+<<<<<<< HEAD
     handleError(error, "inscripcion.controller -> getInscripcionesSummary");
+=======
+    handleError(error, "inscripcion.controller -> getInscripciones");
+>>>>>>> 5b2d593b8b0514cc54aa6b3e5a8f8bca997d1e0f
     respondError(req, res, 400, error.message);
   }
 }
@@ -35,13 +48,18 @@ async function getInscripcionById(req, res) {
     respondSuccess(req, res, 200, inscripcion);
   } catch (error) {
     handleError(error, "inscripcion.controller -> getInscripcionById");
+<<<<<<< HEAD
     respondError(req, res, 500, error.message);
+=======
+    respondError(req, res, 400, error.message);
+>>>>>>> 5b2d593b8b0514cc54aa6b3e5a8f8bca997d1e0f
   }
 }
 
 async function createInscripcion(req, res) {
   try {
     const { body } = req;
+<<<<<<< HEAD
 
     const { error: bodyError } = InscripcionSchema.inscripcionBodySchema.validate(body);
     if (bodyError) return respondError(req, res, 400, bodyError.message);
@@ -57,6 +75,20 @@ async function createInscripcion(req, res) {
   } catch (error) {
     handleError(error, "inscripcion.controller -> createInscripcion");
     respondError(req, res, 500, error.message);
+=======
+    const { error: bodyError } =
+      InscripcionSchema.inscripcionBodySchema.validate(body);
+    if (bodyError) return respondError(req, res, 400, bodyError.message);
+
+    const [inscripcion, errorInscripcion] =
+      await InscripcionService.createInscripcion(body);
+    if (errorInscripcion) return respondError(req, res, 404, errorInscripcion);
+
+    respondSuccess(req, res, 201, inscripcion);
+  } catch (error) {
+    handleError(error, "inscripcion.controller -> createInscripcion");
+    respondError(req, res, 400, error.message);
+>>>>>>> 5b2d593b8b0514cc54aa6b3e5a8f8bca997d1e0f
   }
 }
 
@@ -78,7 +110,11 @@ async function updateInscripcion(req, res) {
     respondSuccess(req, res, 200, inscripcion);
   } catch (error) {
     handleError(error, "inscripcion.controller -> updateInscripcion");
+<<<<<<< HEAD
     respondError(req, res, 500, error.message);
+=======
+    respondError(req, res, 400, error.message);
+>>>>>>> 5b2d593b8b0514cc54aa6b3e5a8f8bca997d1e0f
   }
 }
 
@@ -93,6 +129,7 @@ async function deleteInscripcion(req, res) {
       await InscripcionService.deleteInscripcion(params.id);
     if (errorInscripcion) return respondError(req, res, 404, errorInscripcion);
 
+<<<<<<< HEAD
     respondSuccess(
       req,
       res,
@@ -103,6 +140,12 @@ async function deleteInscripcion(req, res) {
   } catch (error) {
     handleError(error, "inscripcion.controller -> deleteInscripcion");
     respondError(req, res, 500, error.message);
+=======
+    respondSuccess(req, res, 200, inscripcion);
+  } catch (error) {
+    handleError(error, "inscripcion.controller -> deleteInscripcion");
+    respondError(req, res, 400, error.message);
+>>>>>>> 5b2d593b8b0514cc54aa6b3e5a8f8bca997d1e0f
   }
 }
 
@@ -119,14 +162,22 @@ async function reviewInscripcion(req, res) {
     let updatedInscripcion;
     if (estado === "Aprobado") {
       // Actualizar el estado a "Aprobado"
+<<<<<<< HEAD
       updatedInscripcion = await InscripcionService.updateInscripcionEstado(
+=======
+      updatedInscripcion = await InscripcionService.updatedInscripcion(
+>>>>>>> 5b2d593b8b0514cc54aa6b3e5a8f8bca997d1e0f
         inscripcionId,
         estado,
       );
     } else if (estado === "Rechazado") {
       // Agregar un comentario si se proporciona uno
       if (comentario) {
+<<<<<<< HEAD
         updatedInscripcion = await InscripcionService.updateInscripcionEstado(
+=======
+        updatedInscripcion = await InscripcionService.updateInscripcionComentario(
+>>>>>>> 5b2d593b8b0514cc54aa6b3e5a8f8bca997d1e0f
           inscripcionId,
           estado,
           comentario,
@@ -151,7 +202,11 @@ async function reviewInscripcion(req, res) {
 }
 
 module.exports = {
+<<<<<<< HEAD
   getInscripcionesSummary,
+=======
+  getInscripciones,
+>>>>>>> 5b2d593b8b0514cc54aa6b3e5a8f8bca997d1e0f
   getInscripcionById,
   createInscripcion,
   updateInscripcion,
