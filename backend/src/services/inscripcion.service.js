@@ -105,11 +105,11 @@ async function createInscripcion(inscripcion) {
   try {
     const { userId, emprendedorId, estado } = inscripcion;
 
-    //Verificar que el usuario exista
+    // Verificar que el usuario exista
     const user = await User.findById(userId);
     if (!user) return [null, "El usuario no existe"];
 
-    //Verificar que el emprendedor exista
+    // Verificar que el emprendedor exista
     const emprendedor = await Emprendedor.findById(emprendedorId);
     if (!emprendedor) return [null, "El emprendedor no existe"];
 
@@ -122,7 +122,7 @@ async function createInscripcion(inscripcion) {
       return [null, "Ya existe una inscripción para este emprendedor"];
     }
 
-    //verificar que el emprendedor tenga al menos 1 producto
+    // verificar que el emprendedor tenga al menos 1 producto
     if (emprendedor.productosId.length === 0) {
       return [null, "El emprendedor no tiene productos registrados"];
     }
@@ -147,54 +147,20 @@ async function createInscripcion(inscripcion) {
  * ) */
 /*==================================================================== */
 
-<<<<<<< HEAD
 async function updateInscripcion(id, inscripcion) {
-=======
-async function updateInscripcion(id, inscripcion) { 
->>>>>>> 5b2d593b8b0514cc54aa6b3e5a8f8bca997d1e0f
   try {
     const { inscripcionId, estado } = inscripcion;
 
-    //Verificar que la inscripción exista y actualizarla
+    // Verificar que la inscripción exista y actualizarla
     const updatedInscripcion = await Inscripcion.findByIdAndUpdate(
       id,
       {
-<<<<<<< HEAD
         userId,
-=======
-        inscripcionId,
->>>>>>> 5b2d593b8b0514cc54aa6b3e5a8f8bca997d1e0f
         estado,
       },
       { new: true },
     );
 
-<<<<<<< HEAD
-=======
-    if (!updatedInscripcion) return [null, "Inscripción no se actualizó"];
-
-    return [updatedInscripcion, null];
-  } catch (error) {
-    handleError(error, "inscripcion.service -> updateInscripcion");
-  }
-}
-
-async function updateInscripcionComentario(id, inscripcion) { 
-  try {
-    const { inscripcionId, estado } = inscripcion;
-
-    //Verificar que la inscripción exista y actualizarla
-    const updatedInscripcion = await Inscripcion.findByIdAndUpdate(
-      id,
-      {
-        inscripcionId,
-        estado,
-        comentario,
-      },
-      { new: true },
-    );
-
->>>>>>> 5b2d593b8b0514cc54aa6b3e5a8f8bca997d1e0f
     if (!updatedInscripcion) return [null, "Inscripción no se actualizó"];
 
     return [updatedInscripcion, null];

@@ -8,7 +8,7 @@ const authorizationMiddleware = require("../middlewares/authorization.middleware
 const authenticationMiddleware = require("../middlewares/authentication.middleware.js");
 router.use(authenticationMiddleware);
 
-//multer para subir archivos
+// multer para subir archivos
 const {
   uploadFile,
   handleMulterError,

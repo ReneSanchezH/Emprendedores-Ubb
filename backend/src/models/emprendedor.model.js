@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-//modelo de datos para emprendedores. Se crea un registro en la colección emprendedores.
+// modelo de datos para emprendedores. Se crea un registro en la colección emprendedores.
 
 const emprendedorSchema = new mongoose.Schema(
   {

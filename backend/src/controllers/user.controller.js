@@ -1,9 +1,54 @@
 "use strict";
-
 const { respondSuccess, respondError } = require("../utils/resHandler");
 const UserService = require("../services/user.service");
 const { userBodySchema, userIdSchema } = require("../schema/user.schema");
 const { handleError } = require("../utils/errorHandler");
+const sendMail = require("../utils/mailer");
+const User = require("../models/user.model");
+
+
+async function approveApplication(req, res) {
+  const { userId } = req.body;
+  console.log("userId:", userId);
+
+  try {
+    // Valida userId
+    if (!userId) {
+      return res.status(400).json({ msg: "userId es requerido" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ msg: "Usuario no encontrado" });
+    }
+
+    // Cambiar el rol del usuario a 'emprendedor'
+    user.roles = "emprendedor";
+    await user.save();
+
+    // Enviar correo de notificación
+    const subject = "Estado de Postulación";
+    const text = `Hola ${user.name},\n\n¡Felicitaciones! Tu postulación ha sido aceptada.
+      Ahora tienes el rol de emprendedor.\n\nSaludos,\nEquipo Emprendedores UBB`;
+
+    try {
+      await sendMail(user.email, subject, text);
+    } catch (mailError) {
+      // Manejar error de envío de correo
+      handleError(mailError, "approveApplication -> sendMail");
+      return res.status(500).json({
+        msg: "Usuario actualizado, pero no se pudo enviar el correo de notificación",
+      });
+    }
+
+    res
+      .status(200)
+      .json({ msg: "Rol de usuario actualizado y notificación enviada" });
+  } catch (err) {
+    handleError(err, "approveApplication -> main block");
+    res.status(500).send("Server error");
+  }
+}
 
 /**
  * Obtiene todos los usuarios
@@ -124,10 +169,12 @@ async function deleteUser(req, res) {
   }
 }
 
+
 module.exports = {
   getUsers,
   createUser,
   getUserById,
   updateUser,
   deleteUser,
+  approveApplication,
 };

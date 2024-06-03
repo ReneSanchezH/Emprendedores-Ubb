@@ -14,6 +14,12 @@ const authenticationMiddleware = require("../middlewares/authentication.middlewa
 /** Instancia del enrutador */
 const router = express.Router();
 
+/** Ruta aprobar postulaciones */
+const { approveApplication } = require("../controllers/user.controller.js");
+
+// Define una ruta para aprobar postulaciones y notificar al Usuario
+router.post("/approve", approveApplication);
+
 // Define el middleware de autenticación para todas las rutas
 router.use(authenticationMiddleware);
 // Define las rutas para los usuarios
